@@ -1,0 +1,16 @@
+{
+  "name": "parabank",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "HEADLESS=true RETRIES=0 jest --config ./jest.config.js",
+    "test1": "HEADLESS=false RETRIES=0 jest --config ./jest.config.js"
+  },
+  "devDependencies": {
+    "jest": "^29.4.2",
+    "jest-html-reporter": "^3.7.0",
+    "jest-puppeteer": "^7.0.0",
+    "jest-retries": "^1.0.1",
+    "puppeteer": "^19.6.3"
+  }
+}
