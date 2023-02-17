@@ -1,4 +1,9 @@
 const Selector = require("../Selectors/Selectors");
+const ACOverviewPage = require("./ACOverviewPage");
+const HomePage = require("./HomePage");
+const homePage = new HomePage();
+const overview = new ACOverviewPage();
+
 class LoanApplicationPage{
     async applyForALoan(loanDetails){
         await page.waitForNetworkIdle({idleTime: 100});
@@ -20,8 +25,11 @@ class LoanApplicationPage{
         let res = await page.evaluate(element => {
             return element.textContent;
         }, (await page.$x(Selector.paraAfterHeading('Loan Request Processed')))[0]);
-        expect(res).toBe(result.responseText);
-        return await page.$eval(Selector.newAccountId, ele => ele.innerText);
+        await expect(res).toBe(result.responseText);
+        let newLoanAccount = await page.$eval(Selector.newAccountId, ele => ele.innerText);
+        await homePage.clickACOverviewLink(); 
+        await overview.verifyAccount(newLoanAccount);
+        await expect(await overview.getAccountBalance(result.downPaymentAccountNo)).toBe(result.beforeDownPaymentACBalance - Number(result.downPayment));
     }
 }
 module.exports = LoanApplicationPage;

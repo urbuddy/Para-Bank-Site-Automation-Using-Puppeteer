@@ -32,7 +32,7 @@ describe("Para Bank Web-Site Automation", () => {
             pincode: "12345",
             phoneNo: "1234567890",
             ssn: "123456789098",
-            userName: "AAA",
+            userName: "JJJ",
             password: "AAAbbb@123"
         }
         await register.accountRegistration(userDetails);
@@ -49,25 +49,30 @@ describe("Para Bank Web-Site Automation", () => {
         await homePage.openNewAccountLink();
         let newAccountFormDetails = {
             accountType: "CHECKING",
-            moneyTransferAccount: account1
+            moneyTransferAccount: account1.account1No
         };
         await openNewAccount.openNewAccount(newAccountFormDetails);
-        let account2 = await openNewAccount.verifyResponseTextAndGetNewAccount("Congratulations, your account is now open.");
-
-
-        await homePage.clickACOverviewLink(); 
-        await overview.verifyAccount(account2);
+        let verificationDetails = {
+            firstAccount: account1.account1No,
+            balanceBeforeTransactionAC1: account1.account1Balance,
+            confirmText: "Congratulations, your account is now open."
+        };
+        let account2 = await openNewAccount.verifyAndGetNewAccount(verificationDetails);
+        let account1Balance = await overview.getAccountBalance(account1.account1No);
 
 
         await homePage.openTransferFundsLink();
         let details = {
             amount: "2",
-            moneyTransferAccount: account1,
-            moneyRecieveAccount: account2
+            moneyTransferAccount: account1.account1No,
+            moneyRecieveAccount: account2. accountNo,
+            beforeMoneyTransferAccountBalance: account1Balance,
+            beforeMoneyRecieveAccountBalance: account2.accountBalance
         };
         await transferMoney.transferFunds(details);
         await transferMoney.verifyFundTransfered(details);
-        
+        account1Balance = await overview.getAccountBalance(account1.account1No);
+
 
         await homePage.openPayBillsLink();
         let payeeDetails = {
@@ -79,7 +84,8 @@ describe("Para Bank Web-Site Automation", () => {
             phoneNo: "0987654321",
             accountNo: "1234",
             amount: "2",
-            moneyTransferAccount: account1
+            moneyTransferAccount: account1.account1No,
+            beforeBillPayAccountBalance: account1Balance
         };
         await payBill.submitFormOfBill(payeeDetails);
         await payBill.verifyBillPaid(payeeDetails);
@@ -99,24 +105,27 @@ describe("Para Bank Web-Site Automation", () => {
         await updateprofile.verifyProfileUpdated("Your updated address and phone number have been added to the system. ");
 
 
+        await homePage.clickACOverviewLink(); 
+        account1Balance = await overview.getAccountBalance(account1.account1No);
+
+
         await homePage.openRequestloanLink();
         let loanApplicationDetails = {
             amount: "200",
             downPayment: "20",
-            downPaymentTransferAC: account1
+            downPaymentTransferAC: account1.account1No
         };
         await loanApplication.applyForALoan(loanApplicationDetails);
         let loanVerificationDetails = {
-            loanProvider: "ParaBank",
-            loanApprovalDate: "02-15-2023",
+            loanProvider: "Wealth Securities Dynamic Loans (WSDL)",
+            loanApprovalDate: "02-17-2023",
             loanApplicationStatus: "Approved",
-            responseText: "Congratulations, your loan has been approved."
+            responseText: "Congratulations, your loan has been approved.",
+            downPayment: "20",
+            downPaymentAccountNo: account1.account1No,
+            beforeDownPaymentACBalance: account1Balance
         }
-        let loanAccount  = await loanApplication.verifyLoanApprovedAndGetNewLoanAccount(loanVerificationDetails);
-
-
-        await homePage.clickACOverviewLink(); 
-        await overview.verifyAccount(loanAccount);
+        await loanApplication.verifyLoanApprovedAndGetNewLoanAccount(loanVerificationDetails);
 
 
         await homePage.logOut();

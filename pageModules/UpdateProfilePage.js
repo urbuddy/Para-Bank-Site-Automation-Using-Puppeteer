@@ -19,7 +19,7 @@ class UpdateProfilePage{
         let res = await page.evaluate(element => {
             return element.textContent;
         }, (await page.$x(Selector.paraAfterHeading('Profile Updated')))[0]);
-        expect(res).toBe(result);
+        await expect(res).toBe(result);
     }
 }
 module.exports = UpdateProfilePage;

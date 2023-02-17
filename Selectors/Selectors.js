@@ -18,6 +18,9 @@ module.exports = {
     accountNoSelector: function(accountNo) {
         return "//a[normalize-space()='"+accountNo+"']";
     },
+    accountBalance: function(accountNo){
+        return "//a[normalize-space()='"+accountNo+"']/parent::td/following::td[2]";
+    },
     accountType: "#type",
     optionValue: function(value) {
         return "option[value='"+value+"']";

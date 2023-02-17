@@ -19,10 +19,10 @@ class RegisterPage{
 
     async verifyUserRegistered(userDetails, result){
         await page.waitForSelector(Selector.welcomeMsg, {visible: true});
-        expect(await page.$eval(Selector.welcomeMsg, ele => ele.innerText)).toBe("Welcome "+userDetails.userName);
-        expect(await page.$eval(Selector.responseText, ele => ele.innerText)).toBe(result);
+        await expect(await page.$eval(Selector.welcomeMsg, ele => ele.innerText)).toBe("Welcome "+userDetails.userName);
+        await expect(await page.$eval(Selector.responseText, ele => ele.innerText)).toBe(result);
         await page.waitForSelector(Selector.logedInText, {visible: true});
-        expect(await page.$eval(Selector.logedInText, ele => ele.innerText)).toBe("Welcome "+userDetails.firstName+" "+userDetails.lastName);
+        await expect(await page.$eval(Selector.logedInText, ele => ele.innerText)).toBe("Welcome "+userDetails.firstName+" "+userDetails.lastName);
     }
 }
 module.exports = RegisterPage;

@@ -16,7 +16,7 @@ class HomePage{
         let logInBTn = await page.waitForSelector(Selector.submitBtn('Log In'));
         await logInBTn.click();
         await page.waitForSelector(Selector.logedInText, {visible: true});
-        expect(await page.$eval(Selector.logedInText, ele => ele.innerText)).toBe("Welcome "+userDetails.firstName+userDetails.firstName+" "+userDetails.lastName+userDetails.lastName);
+        await expect(await page.$eval(Selector.logedInText, ele => ele.innerText)).toBe("Welcome "+userDetails.firstName+" "+userDetails.lastName);
     }
 
     async clickACOverviewLink(){
